@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Image Carousel</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientAnimation 15s ease infinite;
+    }
+
+    /* Bonus: Makes the background move slowly */
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    /* 1. The Container - Now adapts to screen size */
+.carousel-container {
+  width: 95%;           
+  max-width: 700px;    
+  margin: 50px auto;    
+  overflow: hidden;
+  position: relative;
+  border-radius: 20px; 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
+  background: #222; 
+}
+
+/* 2. The Wrapper - The "ribbon" of images */
+.carousel-slide {
+  display: flex;
+  width: 100%;
+  transition: transform 0.5s cubic-bezier(0.45, 0, 0.55, 1); 
+}
+
+/* 3. The Images - This is where the fix is! */
+.carousel-slide img {
+  width: 100%;          
+  flex-shrink: 0;       
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+/* 4. Styled Buttons */
+button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  scale: 1.1;
+}
+
+#prevBtn { left: 20px; }
+#nextBtn { right: 20px; }
+  </style>
+</head>
+
+<body>
+
+  <div class="carousel-container">
+    <div class="carousel-slide">
+      <img src="https://img.freepik.com/premium-photo/bmw-various-models_551707-85299.jpg"
+        alt="Slide 1">
+      <img src="https://4kwallpapers.com/images/wallpapers/lamborghini-3840x2160-11125.jpeg"
+        alt="Slide 2">
+      <img src="https://images4.alphacoders.com/686/686332.jpg"
+        alt="Slide 3">
+    </div>
+
+    <button id="prevBtn">Prev</button>
+    <button id="nextBtn">Next</button>
+  </div>
+
+  <script>
+
+    const slide = document.querySelector('.carousel-slide');
+    const images = document.querySelectorAll('.carousel-slide img');
+
+    // Buttons
+    const prevBtn = document.querySelector('#prevBtn');
+    const nextBtn = document.querySelector('#nextBtn');
+
+    let counter = 0;
+    const size = images[0].clientWidth;
+
+    nextBtn.addEventListener('click', () => {
+      if (counter >= images.length - 1) return;
+      counter++;
+      slide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (counter <= 0) return;
+      counter--;
+      slide.style.transform = 'translateX(' + (-size * counter) + 'px)';
+    });
+
+  </script>
+
+</body>
+
+</html>

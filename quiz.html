@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #333;
+            color: white;
+            display: flex;
+            justify-content: center;
+        }
+
+        #container {
+            height: 450px;
+            width: 450px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #que {
+            margin-top: 2rem;
+        }
+
+        #options button {
+            background-color: #888;
+            color: white;
+            border: none;
+            border-radius: 8px;
+        }
+
+        #nextBtn {
+            background-color: #b200e8;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all ease-in-out 0.3s;
+        }
+
+        #nextBtn:hover {
+            box-shadow: 0 0 15px #b200e8;
+            translate: 0px -2px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="top">
+            <h2 id="score">Score: <p id="scr"></p>
+            </h2>
+            <h3 id="timer"></h3>
+        </div>
+        <div id="que"></div>
+        <div id="options"></div>
+        <button id="nextBtn">Next</button>
+    </div>
+</body>
+<script>
+    const questions = [
+        {
+            question: "Who is Sallu?",
+            options: ["Salman Khan", "Amaan", "Shah Rukh Khan", "Akshay Kumar"],
+            answer: "Salman Khan"
+        },
+        {
+            question: "Capital of India?",
+            options: ["Mumbai", "Delhi", "Kolkata", "Chennai"],
+            answer: "Delhi"
+        },
+        {
+            question: "2 + 2 = ?",
+            options: ["3", "4", "5", "6"],
+            answer: "4"
+        }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let selected = false;
+    let timeLeft = 30; // Total time for the whole quiz
+    let timer;
+
+    const questionEl = document.getElementById("que");
+    const optionsEl = document.getElementById("options");
+    const scoreEl = document.getElementById("scr");
+    const timerEl = document.getElementById("timer");
+    const nextBtn = document.getElementById("nextBtn");
+
+    function startGlobalTimer() {
+        timer = setInterval(() => {
+            timeLeft--;
+            timerEl.textContent = "Time Left: " + timeLeft + "s";
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                endQuiz("Time's Up!");
+            }
+        }, 1000);
+    }
+
+    function showQuestion() {
+        selected = false;
+        nextBtn.disabled = true;
+
+        const q = questions[currentQuestion];
+        questionEl.textContent = q.question;
+        optionsEl.innerHTML = "";
+
+        q.options.forEach(option => {
+            const btn = document.createElement("button");
+            btn.textContent = option;
+            // Adding some basic styling to make them look like buttons
+            btn.style.display = "block";
+            btn.style.margin = "10px 0";
+            btn.style.padding = "10px";
+            btn.style.cursor = "pointer";
+
+            btn.onclick = () => {
+                if (selected || timeLeft <= 0) return;
+                selected = true;
+
+                const allButtons = optionsEl.querySelectorAll("button");
+                allButtons.forEach(b => {
+                    if (b.textContent === q.answer) {
+                        b.style.backgroundColor = "green";
+                    } else if (b.textContent === option) {
+                        b.style.backgroundColor = "red";
+                    }
+                    b.disabled = true;
+                });
+
+                if (option === q.answer) {
+                    score++;
+                    scoreEl.textContent = score;
+                }
+                nextBtn.disabled = false;
+            };
+            optionsEl.appendChild(btn);
+        });
+    }
+
+    function endQuiz(message) {
+        clearInterval(timer);
+        questionEl.textContent = message || "Quiz Over!";
+        optionsEl.innerHTML = `<h3>Final Score: ${score}</h3>`;
+        nextBtn.style.display = "none";
+        timerEl.style.color = "red";
+    }
+
+    nextBtn.onclick = () => {
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            endQuiz("You finished!");
+        }
+    };
+
+    // INITIALIZE: Start the timer once, then show the first question
+    startGlobalTimer();
+    showQuestion();
+</script>
+
+</html>

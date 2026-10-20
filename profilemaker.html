@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>card maker</title>
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #68bedf;
+        }
+
+        /* FORM CONTAINER */
+        .container {
+            width: 300px;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .head {
+            color: #333333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            margin-left: 1.5rem;
+        }
+
+        .container input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .container input:focus {
+            border-color: #6c63ff;
+        }
+
+        #btn {
+            background: #6c63ff;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            border: none;
+            transition: 0.3s;
+        }
+
+        #btn:hover {
+            background: #5548e5;
+        }
+
+        /* CARD SECTION */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* CARD DESIGN */
+        .card {
+            width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* IMAGE */
+        .card img {
+            height: 70px;
+            width: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* TEXT */
+        .card h3 {
+            margin-top: 10px;
+        }
+
+        .card h4 {
+            margin-top: 5px;
+            color: #666;
+        }
+
+        .card p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #444;
+        }
+
+        .delete {
+            background-color: #eb3636;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin-top: 0.5rem;
+        }
+
+        .delete:hover {
+            background-color: #bd1313;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="head">Profile Maker</h1>
+        <input type="text" id="pic" placeholder="photo url">
+        <input type="text" id="name" placeholder="name">
+        <input type="text" id="job" placeholder="job">
+        <input type="text" id="info" placeholder="info">
+        <input type="submit" id="btn">
+    </div>
+    <div class="cards"></div>
+    <script>
+        const pic = document.getElementById("pic");
+        const name = document.getElementById("name");
+        const job = document.getElementById("job");
+        const info = document.getElementById("info");
+        const btn = document.getElementById("btn");
+
+        btn.addEventListener("click", function () {
+            let card = document.createElement("div");
+            card.classList.add("card");
+
+            let img = document.createElement("img");
+            img.src = pic.value || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?_=20150327203541";
+            card.appendChild(img);
+
+            let h3 = document.createElement("h3");
+            h3.textContent = name.value;
+            card.appendChild(h3);
+
+            let h4 = document.createElement("h4");
+            h4.textContent = job.value;
+            card.appendChild(h4);
+
+            let p = document.createElement("p");
+            p.textContent = info.value;
+            card.appendChild(p);
+
+            let delbtn = document.createElement("button");
+            delbtn.textContent = "Remove";
+            delbtn.classList.add("delete");
+            card.appendChild(delbtn);
+
+            // delete logic
+            delbtn.addEventListener("click", function () {
+                card.remove();
+            });
+
+            document.querySelector(".cards").appendChild(card);
+        });
+
+    </script>
+</body>
+
+</html>
